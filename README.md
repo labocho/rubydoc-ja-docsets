@@ -4,6 +4,19 @@ Ruby リファレンスマニュアル (http://doc.ruby-lang.org/ja/) を Dash (
 
 # 使い方
 
+下記の dash-feed:// から始まる URL を Safari などで開くと Dash が起動し、Downloads に追加されます。あとは他の docsets などと同様、Download をクリックすれば利用可能になります。
+
+    # Ruby 2.0.0 リファレンスマニュアル
+    dash-feed://https%3A%2F%2Fraw.github.com%2Flabocho%2Frubydoc-ja-docsets%2Fmaster%2Ftarball%2FRuby-2.0.0-ja.xml
+
+    # Ruby 1.9.3 リファレンスマニュアル
+    dash-feed://https%3A%2F%2Fraw.github.com%2Flabocho%2Frubydoc-ja-docsets%2Fmaster%2Ftarball%2FRuby-1.9.3-ja.xml
+
+    # Ruby 1.8.7 リファレンスマニュアル
+    dash-feed://https%3A%2F%2Fraw.github.com%2Flabocho%2Frubydoc-ja-docsets%2Fmaster%2Ftarball%2FRuby-1.8.7-ja.xml
+
+# 自分でビルド
+
 Ruby (>= 1.9.2), bundler, svn が必要です。
 
     git clone git://github.com/labocho/rubydoc-ja-docsets.git
