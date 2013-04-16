@@ -65,7 +65,7 @@ end
 
 task :feed => :generate_docsets do
   mkdir_p "tarball"
-  url = "https://raw.github.com/labocho/rubydoc-ja-docsets/master/tarball/Ruby%20#{version}-ja.tgz"
+  url = "http://raw.github.com/labocho/rubydoc-ja-docsets/master/tarball/Ruby%20#{version}-ja.tgz"
   open("tarball/Ruby #{version}-ja.xml", "w"){|f|
     f.write %(<entry><version>#{svnversion}</version><url>#{url}</url></entry>)
   }
