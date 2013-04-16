@@ -15,7 +15,7 @@ version = ARGV.shift
 
 docset = "docsets/Ruby #{version}-ja.docset"
 mkdir_p "#{docset}/Contents/Resources/Documents"
-exit $?.exitstatus unless system("cp -R build/rubydoc/refm/api/html/#{version}/* #{"#{docset}/Contents/Resources/Documents".shellescape}")
+exit $?.exitstatus unless system("cp -R html/#{version}/* #{"#{docset}/Contents/Resources/Documents".shellescape}")
 cp "#{docset}/Contents/Resources/Documents/rurema.png", "#{docset}/icon.png"
 
 open("#{docset}/Contents/Info.plist", "w") do |f|

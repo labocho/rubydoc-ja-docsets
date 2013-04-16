@@ -1,9 +1,5 @@
 require "shellwords"
 
-def run(command)
-  exit $?.exitstatus unless system(command)
-end
-
 def version
   ENV["VERSION"] || raise("!!! Please specify VERSION (1.8.7|1.9.3|2.0.0) !!!")
 end
@@ -13,23 +9,28 @@ def svnversion
 end
 
 task :checkout do
-  run "svn co http://jp.rubyist.net/svn/rurema/doctree/trunk build/rubydoc"
-  run "svn co http://jp.rubyist.net/svn/rurema/bitclust/trunk build/bitclust"
+  sh "svn co http://jp.rubyist.net/svn/rurema/doctree/trunk build/rubydoc"
+  sh "svn co http://jp.rubyist.net/svn/rurema/bitclust/trunk build/bitclust"
 end
 
 task :generate_html => :checkout do
-  if File.exists?("build/rubydoc/refm/api/html/#{version}/REVISION") &&
-     File.read("build/rubydoc/refm/api/html/#{version}/REVISION").to_i == svnversion
+  if File.exists?("html/#{version}/REVISION") &&
+     File.read("html/#{version}/REVISION").to_i == svnversion
      next
   end
-  Dir.chdir("build/rubydoc/refm/api") do
-    mkdir_p "html"
-    run "ruby -I ../../../bitclust/lib ../../../bitclust/bin/bitclust -d ./db-#{version} init version=#{version} encoding=utf-8"
-    run "ruby -I ../../../bitclust/lib ../../../bitclust/bin/bitclust -d ./db-#{version} update --stdlibtree=src"
-    rm_rf "./html/#{version}"
-    run "mkdir ./html/#{version} ./html/#{version}/function ./html/#{version}/json"
-    run "ruby ../../../bitclust/tools/bc-tohtmlpackage.rb -d ./db-#{version} -o ./html/#{version} --catalog=../../../bitclust/data/bitclust/catalog"
-    run "echo #{svnversion} > html/#{version}/REVISION"
+  outputdir = File.expand_path("html/#{version}")
+  rm_rf outputdir
+  mkdir_p "#{outputdir}/function"
+  mkdir_p "#{outputdir}/json"
+  Dir.chdir("build/bitclust") do
+    database = File.expand_path("#{outputdir}/../db-#{version}")
+    bitclust = "bundle exec bitclust --database=#{database.shellescape}"
+    sh "bundle install"
+    sh "#{bitclust} init version=#{version} encoding=utf-8"
+    sh "#{bitclust} update --stdlibtree=../rubydoc/refm/api/src"
+    sh "#{bitclust} statichtml --database=#{database.shellescape} --outputdir=#{outputdir.shellescape} --catalog=data/bitclust/catalog"
+    sh "echo #{svnversion} > #{outputdir.shellescape}/REVISION"
+    rm_rf database
   end
 end
 
@@ -39,7 +40,7 @@ task :generate_docsets => :generate_html do
      next
   end
   ruby "generate_docsets.rb #{version}"
-  run "echo #{svnversion} > docsets/Ruby\\ #{version}-ja.docset/REVISION"
+  sh "echo #{svnversion} > docsets/Ruby\\ #{version}-ja.docset/REVISION"
 end
 
 task :clean_docsets do

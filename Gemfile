@@ -1,4 +1,4 @@
-source :rubygems
+source "https://rubygems.org"
 
 gem "activerecord", "~> 3.2.13"
 gem "sqlite3", "~> 1.3.7"
