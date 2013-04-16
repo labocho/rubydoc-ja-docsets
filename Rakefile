@@ -57,7 +57,7 @@ end
 
 task :tarball => [:generate_docsets, :feed] do
   source = "docsets/Ruby #{version}-ja.docset"
-  dest = "tarball/Ruby #{version}-ja.tgz"
+  dest = "tarball/Ruby-#{version}-ja.tgz"
   rm_f dest
   mkdir_p File.dirname(dest)
   sh "tar --exclude='.DS_Store' -czf #{dest.shellescape} #{source.shellescape}"
@@ -65,8 +65,8 @@ end
 
 task :feed => :generate_docsets do
   mkdir_p "tarball"
-  url = "http://raw.github.com/labocho/rubydoc-ja-docsets/master/tarball/Ruby%20#{version}-ja.tgz"
-  open("tarball/Ruby #{version}-ja.xml", "w"){|f|
+  url = "http://raw.github.com/labocho/rubydoc-ja-docsets/master/tarball/Ruby-#{version}-ja.tgz"
+  open("tarball/Ruby-#{version}-ja.xml", "w"){|f|
     f.write %(<entry><version>#{svnversion}</version><url>#{url}</url></entry>)
   }
 end
