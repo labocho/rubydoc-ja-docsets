@@ -1,4 +1,6 @@
 require "shellwords"
+require 'dotenv'
+Dotenv.load
 
 def version
   ENV["VERSION"] || raise("!!! Please specify VERSION (1.8.7|1.9.3|2.0.0) !!!")
@@ -11,6 +13,15 @@ end
 def sha1
   `cd #{root.shellescape}/build/doctree && git log -n 1 --format=format:%H`.strip
 end
+
+def tarball_name
+  "Ruby-#{version}-ja.tgz"
+end
+
+def s3_endpoint
+  ENV["S3_ENDPOINT"] || "s3.amazonaws.com"
+end
+
 
 task :clone do
   unless File.exists? "build/doctree"
@@ -69,7 +80,7 @@ end
 
 task :tarball => [:generate_docsets, :feed] do
   source = "docsets/Ruby #{version}-ja.docset"
-  dest = "tarball/Ruby-#{version}-ja.tgz"
+  dest = "tarball/#{tarball_name}"
   rm_f dest
   mkdir_p File.dirname(dest)
   sh "tar --exclude='.DS_Store' -czf #{dest.shellescape} #{source.shellescape}"
@@ -77,9 +88,18 @@ end
 
 task :feed => :generate_docsets do
   mkdir_p "tarball"
-  url = "http://raw.github.com/labocho/rubydoc-ja-docsets/master/tarball/Ruby-#{version}-ja.tgz"
+  url = "https://#{s3_endpoint}/rubydoc-ja-docsets/#{sha1}/#{tarball_name}"
   open("tarball/Ruby-#{version}-ja.xml", "w"){|f|
     f.write %(<entry><version>#{sha1}</version><url>#{url}</url></entry>)
   }
 end
 
+task :release => :tarball do
+  require "aws"
+  s3 = Aws::S3.new(ENV["AWS_ACCESS_KEY_ID"], ENV["AWS_SECRET_ACCESS_KEY"], server: s3_endpoint)
+  bucket = s3.bucket("rubydoc-ja-docsets")
+  open("tarball/#{tarball_name}", "rb:ascii-8bit") do |file|
+    puts "Uploading... tarball/#{tarball_name}"
+    bucket.put "#{sha1}/#{tarball_name}", file, {}, "public-read", "content-type" => "application/x-compressed"
+  end
+end

@@ -25,6 +25,10 @@ GEM
       i18n (= 0.6.1)
       multi_json (~> 1.0)
     arel (3.0.2)
+    aws (2.9.1)
+      http_connection
+      uuidtools
+      xml-simple
     builder (3.0.4)
     columnize (0.3.6)
     debugger (1.5.0)
@@ -33,6 +37,8 @@ GEM
       debugger-ruby_core_source (~> 1.2.0)
     debugger-linecache (1.2.0)
     debugger-ruby_core_source (1.2.0)
+    dotenv (0.9.0)
+    http_connection (1.4.4)
     i18n (0.6.1)
     multi_json (1.7.2)
     progressbar (0.20.0)
@@ -40,15 +46,19 @@ GEM
     rake (10.0.4)
     sqlite3 (1.3.7)
     tzinfo (0.3.37)
+    uuidtools (2.1.4)
+    xml-simple (1.1.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   activerecord (~> 3.2.13)
+  aws
   bitclust-core!
   bitclust-dev!
   debugger
+  dotenv
   rake (~> 10.0)
   refe2!
   sqlite3 (~> 1.3.7)
