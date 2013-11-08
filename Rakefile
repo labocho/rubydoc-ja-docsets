@@ -33,10 +33,15 @@ task :generate_html => :pull do
   mkdir_p "#{outputdir}/json"
 
   database = File.expand_path("#{outputdir}/../db-#{version}")
-  bitclust = "bundle exec bitclust --database=#{database.shellescape}"
-  sh "#{bitclust} init version=#{version} encoding=utf-8"
-  sh "#{bitclust} update --stdlibtree=build/doctree/refm/api/src"
-  sh "#{bitclust} statichtml --outputdir=#{outputdir.shellescape}"
+  stdlibtree = File.expand_path("build/doctree/refm/api/src")
+  Dir.chdir("build/bitclust") do
+    sh "bundle install"
+    bitclust = "RUBYLIB=lib bundle exec bin/bitclust --database=#{database.shellescape}"
+    bc_tohtmlpackage = "RUBYLIB=lib bundle exec tools/bc-tohtmlpackage.rb --database=#{database.shellescape}"
+    sh "#{bitclust} init version=#{version} encoding=utf-8"
+    sh "#{bitclust} update --stdlibtree=#{stdlibtree.shellescape}"
+    sh "#{bc_tohtmlpackage} --outputdir=#{outputdir.shellescape}"
+  end
   sh "echo #{sha1} > #{outputdir.shellescape}/REVISION"
   rm_rf database
 end
