@@ -3,7 +3,7 @@ require 'dotenv'
 Dotenv.load
 
 def version
-  ENV["VERSION"] || raise("!!! Please specify VERSION (1.8.7|1.9.3|2.0.0) !!!")
+  ENV["VERSION"] || raise("!!! Please specify VERSION (1.8.7|1.9.3|2.0.0|2.1.0) !!!")
 end
 
 def root
@@ -45,14 +45,12 @@ task :generate_html => :pull do
 
   database = File.expand_path("#{outputdir}/../db-#{version}")
   stdlibtree = File.expand_path("build/doctree/refm/api/src")
-  Dir.chdir("build/bitclust") do
-    sh "bundle install"
-    bitclust = "RUBYLIB=lib bundle exec bin/bitclust --database=#{database.shellescape}"
-    bc_tohtmlpackage = "RUBYLIB=lib bundle exec tools/bc-tohtmlpackage.rb --database=#{database.shellescape}"
-    sh "#{bitclust} init version=#{version} encoding=utf-8"
-    sh "#{bitclust} update --stdlibtree=#{stdlibtree.shellescape}"
-    sh "#{bc_tohtmlpackage} --outputdir=#{outputdir.shellescape}"
-  end
+
+  bitclust = "bundle exec bitclust --database=#{database.shellescape}"
+  sh "#{bitclust} init version=#{version} encoding=utf-8"
+  sh "#{bitclust} update --stdlibtree=#{stdlibtree.shellescape}"
+  sh "#{bitclust} statichtml --outputdir=#{outputdir.shellescape}"
+
   sh "echo #{sha1} > #{outputdir.shellescape}/REVISION"
   rm_rf database
 end
