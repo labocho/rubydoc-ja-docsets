@@ -56,7 +56,7 @@ end
 
 html_dir = "#{docset}/Contents/Resources/Documents"
 Find.find(html_dir) do |file|
-  if file !~ /\/(function|doc)\// && FileTest.file?(file) && File.extname(file) == '.html'
+  if file !~ /\/doc\// && FileTest.file?(file) && File.extname(file) == '.html'
     html = File.read(file)
     item = {key: '', type: ""}
 
@@ -76,6 +76,12 @@ Find.find(html_dir) do |file|
     if html =~ %r{<title>(library) (.*?)</title>}
       item[:key] = CGI.unescapeHTML($2) + 'ライブラリ'
       item[:type] = "Library"
+    end
+
+    # CAPI function
+    if html =~ %r{<title>(function) (.*?)</title>}
+      item[:key] = CGI.unescapeHTML($2)
+      item[:type] = "Function"
     end
 
     if item[:key].empty?
