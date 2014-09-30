@@ -45,10 +45,12 @@ task :generate_html => :pull do
 
   database = File.expand_path("#{outputdir}/../db-#{version}")
   stdlibtree = File.expand_path("build/doctree/refm/api/src")
+  capipaths = Dir.glob("build/doctree/refm/capi/src/*")
 
   bitclust = "bundle exec bitclust --database=#{database.shellescape}"
   sh "#{bitclust} init version=#{version} encoding=utf-8"
   sh "#{bitclust} update --stdlibtree=#{stdlibtree.shellescape}"
+  sh "#{bitclust} --capi update #{capipaths.collect(&:shellescape).join(" ")}"
   sh "#{bitclust} statichtml --outputdir=#{outputdir.shellescape}"
 
   sh "echo #{sha1} > #{outputdir.shellescape}/REVISION"
