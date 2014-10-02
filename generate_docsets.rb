@@ -8,8 +8,10 @@ require "cgi"
 require "pathname"
 require "yaml"
 require "shellwords"
+require "bitclust"
 
 include FileUtils
+include BitClust::NameUtils
 
 version = ARGV.shift
 
@@ -55,6 +57,8 @@ class SearchIndex < ActiveRecord::Base
 end
 
 html_dir = "#{docset}/Contents/Resources/Documents"
+method_dir = File.join(html_dir, "method")
+char_to_mark = MARK_TO_CHAR.invert
 Find.find(html_dir) do |file|
   if file !~ /\/doc\// && FileTest.file?(file) && File.extname(file) == '.html'
     html = File.read(file)
@@ -62,7 +66,12 @@ Find.find(html_dir) do |file|
 
     # method
     if html =~ %r{<title>(.*? method|module function|constant|variable) (.*?)</title>}
-      item[:key] = CGI.unescapeHTML($2)
+      is_variable = /variable\z/.match($1)
+      path = Pathname.new(file).relative_path_from(Pathname.new(method_dir)).to_s.gsub(/\.\w+$/, "")
+      item[:key] = decodename_fs(path).gsub(%r|/[\w]/|) { |s|
+        char_to_mark[s.delete("/")]
+      }
+      item[:key].gsub!(/^Kernel/, "") if is_variable
       item[:type] = "Method"
     end
 
