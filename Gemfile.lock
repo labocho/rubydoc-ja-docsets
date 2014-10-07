@@ -28,7 +28,7 @@ GEM
     progressbar (0.21.0)
     rack (1.5.2)
     rake (10.0.4)
-    sqlite3 (1.3.7)
+    sqlite3 (1.3.9)
     tzinfo (0.3.37)
     uuidtools (2.1.4)
     xml-simple (1.1.2)
@@ -42,4 +42,4 @@ DEPENDENCIES
   bitclust-core
   dotenv
   rake (~> 10.0)
-  sqlite3 (~> 1.3.7)
+  sqlite3 (~> 1.3.9)
