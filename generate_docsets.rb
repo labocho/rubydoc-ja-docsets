@@ -76,7 +76,7 @@ Find.find(html_dir) do |file|
     end
 
     # class
-    if html =~ %r{<title>(class|module|object) (.*?)</title>}
+    if html =~ %r{<title>(class|module(?!\sfunction)|object) (.*?)</title>}
       item[:key] = CGI.unescapeHTML($2)
       item[:type] = $1.camelize
     end
