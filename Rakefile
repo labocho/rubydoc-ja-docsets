@@ -57,7 +57,12 @@ task :generate_html => :pull do
   rm_rf database
 end
 
-task :generate_docsets => :generate_html do
+task :add_original_url => :generate_html do
+  next if File.read("html/#{version}/doc/index.html")[%(<html lang="ja-JP"><!-- Online page at http://docs.ruby-lang.org/ja/#{version}/doc/index.html -->)]
+  ruby "add_original_url.rb #{version}"
+end
+
+task :generate_docsets => :add_original_url do
   revision_file = "docsets/Ruby #{version}-ja.docset/REVISION"
   if File.exists?(revision_file)
      next if File.read(revision_file).strip == sha1
