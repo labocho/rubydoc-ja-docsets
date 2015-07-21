@@ -88,7 +88,7 @@ Find.find(html_dir) do |file|
     end
 
     # CAPI function
-    if html =~ %r{<title>(function) (.*?)</title>}
+    if html =~ %r{<title>(function|macro) (.*?)</title>}
       item[:key] = CGI.unescapeHTML($2)
       item[:type] = "Function"
     end
