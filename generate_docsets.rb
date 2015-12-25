@@ -64,33 +64,37 @@ Find.find(html_dir) do |file|
     html = File.read(file)
     item = {key: '', type: ""}
 
-    # method
-    if html =~ %r{<title>(.*? method|module function|constant|variable) (.*?)</title>}
-      is_variable = /variable\z/.match($1)
-      path = Pathname.new(file).relative_path_from(Pathname.new(method_dir)).to_s.gsub(/\.\w+$/, "")
-      item[:key] = decodename_fs(path).gsub(%r|/[\w]/|) { |s|
-        char_to_mark[s.delete("/")]
-      }
-      item[:key].gsub!(/^Kernel/, "") if is_variable
-      item[:type] = "Method"
-    end
+    if html =~ %r{<title>(.*?) \(Ruby \d\.\d\.\d\)</title>}
+      title = $1
 
-    # class
-    if html =~ %r{<title>(class|module(?!\sfunction)|object) (.*?)</title>}
-      item[:key] = CGI.unescapeHTML($2)
-      item[:type] = $1.camelize
-    end
+      # method
+      if title =~ %r{(.*? method|module function|constant|variable) (.*)}
+        is_variable = /variable\z/.match($1)
+        path = Pathname.new(file).relative_path_from(Pathname.new(method_dir)).to_s.gsub(/\.\w+$/, "")
+        item[:key] = decodename_fs(path).gsub(%r|/[\w]/|) { |s|
+          char_to_mark[s.delete("/")]
+        }
+        item[:key].gsub!(/^Kernel/, "") if is_variable
+        item[:type] = "Method"
+      end
 
-    # library
-    if html =~ %r{<title>(library) (.*?)</title>}
-      item[:key] = CGI.unescapeHTML($2) + 'ライブラリ'
-      item[:type] = "Library"
-    end
+      # class
+      if title =~ %r{(class|module(?!\sfunction)|object) (.*)}
+        item[:key] = CGI.unescapeHTML($2)
+        item[:type] = $1.camelize
+      end
 
-    # CAPI function
-    if html =~ %r{<title>(function|macro) (.*?)</title>}
-      item[:key] = CGI.unescapeHTML($2)
-      item[:type] = "Function"
+      # library
+      if title =~ %r{(library) (.*)}
+        item[:key] = CGI.unescapeHTML($2) + ' ライブラリ'
+        item[:type] = "Library"
+      end
+
+      # CAPI function
+      if title =~ %r{(function|macro) (.*)}
+        item[:key] = CGI.unescapeHTML($2)
+        item[:type] = "Function"
+      end
     end
 
     if item[:key].empty?

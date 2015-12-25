@@ -1,45 +1,53 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (3.2.13)
-      activesupport (= 3.2.13)
-      builder (~> 3.0.0)
-    activerecord (3.2.13)
-      activemodel (= 3.2.13)
-      activesupport (= 3.2.13)
-      arel (~> 3.0.2)
-      tzinfo (~> 0.3.29)
-    activesupport (3.2.13)
-      i18n (= 0.6.1)
-      multi_json (~> 1.0)
-    arel (3.0.2)
-    aws (2.9.1)
+    activemodel (4.2.5)
+      activesupport (= 4.2.5)
+      builder (~> 3.1)
+    activerecord (4.2.5)
+      activemodel (= 4.2.5)
+      activesupport (= 4.2.5)
+      arel (~> 6.0)
+    activesupport (4.2.5)
+      i18n (~> 0.7)
+      json (~> 1.7, >= 1.7.7)
+      minitest (~> 5.1)
+      thread_safe (~> 0.3, >= 0.3.4)
+      tzinfo (~> 1.1)
+    arel (6.0.3)
+    aws (2.10.2)
       http_connection
       uuidtools
       xml-simple
-    bitclust-core (0.8.0)
+    bitclust-core (0.9.0)
       progressbar
       rack
-    builder (3.0.4)
-    dotenv (0.9.0)
+    builder (3.2.2)
+    dotenv (2.0.2)
     http_connection (1.4.4)
-    i18n (0.6.1)
-    multi_json (1.7.2)
+    i18n (0.7.0)
+    json (1.8.3)
+    minitest (5.8.3)
     progressbar (0.21.0)
-    rack (1.5.2)
-    rake (10.0.4)
-    sqlite3 (1.3.9)
-    tzinfo (0.3.37)
-    uuidtools (2.1.4)
-    xml-simple (1.1.2)
+    rack (1.6.4)
+    rake (10.4.2)
+    sqlite3 (1.3.11)
+    thread_safe (0.3.5)
+    tzinfo (1.2.2)
+      thread_safe (~> 0.1)
+    uuidtools (2.1.5)
+    xml-simple (1.1.5)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
-  activerecord (~> 3.2.13)
+  activerecord
   aws
   bitclust-core
   dotenv
-  rake (~> 10.0)
-  sqlite3 (~> 1.3.9)
+  rake
+  sqlite3
+
+BUNDLED WITH
+   1.10.6
