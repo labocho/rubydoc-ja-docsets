@@ -3,7 +3,7 @@ require 'dotenv'
 Dotenv.load
 
 def version
-  ENV["VERSION"] || raise("!!! Please specify VERSION (1.9.3|2.0.0|2.1.0|2.2.0) !!!")
+  ENV["VERSION"] || raise("!!! Please specify VERSION (1.9.3|2.0.0|2.1.0|2.2.0|2.3.0) !!!")
 end
 
 def root
