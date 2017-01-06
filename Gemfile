@@ -6,3 +6,4 @@ gem "rake"
 gem "aws"
 gem "dotenv"
 gem "bitclust-core"
+gem "progressbar", "< 1.0" # bitclust-core 0.9.4 does not support progressbar >= 1.0
