@@ -1,0 +1,27 @@
+header {
+  margin-bottom: 1.5em;
+}
+
+.ruby-logo {
+  height: 39px;
+  vertical-align: top;
+  margin-right: 15px;
+}
+
+footer {
+}
+
+.social-buttons {
+  padding: 0;
+  margin-bottom: 0;
+}
+.download-links {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 2em 0;
+}
+
+.download-links > li {
+  margin-right: 1em;
+  display: inline-block;
+}
