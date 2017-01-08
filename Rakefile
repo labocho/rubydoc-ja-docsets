@@ -108,3 +108,7 @@ task :release => :tarball do
     bucket.put "#{sha1}/#{tarball_name}", file, {}, "public-read", "content-type" => "application/x-compressed"
   end
 end
+
+task :server do
+  ruby "-run", "-e", "httpd", "--", "gh-pages"
+end
