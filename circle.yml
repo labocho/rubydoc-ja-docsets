@@ -8,4 +8,7 @@ deployment:
   production:
     branch: circleci
     commands:
-      - if [ -n "${BUILD_DOCSETS}" ]; then; bundle exec ruby scripts/build_and_pull_request.rb; fi
+      - >
+        if [ -n "${BUILD_DOCSETS}" ]; then
+          bundle exec ruby scripts/build_and_pull_request.rb;
+        fi
