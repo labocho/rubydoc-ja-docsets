@@ -6,7 +6,7 @@ test:
     - echo "no test"
 deployment:
   production:
-    branch: circleci
+    branch: master
     commands:
       - >
         if [ -n "${BUILD_DOCSETS}" ]; then
