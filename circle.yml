@@ -1,0 +1,8 @@
+test:
+  override:
+    - echo "no test"
+deployment:
+  production:
+    branch: circleci
+    commands:
+      - bundle exec scripts/build_and_pull_request.rb
