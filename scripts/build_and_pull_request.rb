@@ -24,7 +24,7 @@ module PullRequest
     git_username = client.user.login
     git_email = ENV['GIT_EMAIL']
 
-    create_branch(git_username, git_email, branch)
+    create_branch(git_username, git_email, branch, now)
     create_pull_request(repo_full_name, branch, now)
   end
 
