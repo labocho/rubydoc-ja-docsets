@@ -21,7 +21,6 @@ GEM
       progressbar
       rack
     concurrent-ruby (1.0.4)
-    dotenv (2.1.1)
     http_connection (1.4.4)
     i18n (0.7.0)
     minitest (5.10.1)
@@ -42,7 +41,6 @@ DEPENDENCIES
   activerecord
   aws
   bitclust-core
-  dotenv
   progressbar (< 1.0)
   rake
   sqlite3

@@ -1,6 +1,4 @@
 require "shellwords"
-require 'dotenv'
-Dotenv.load
 
 def version
   ENV["VERSION"] || raise("!!! Please specify VERSION (2.2.0|2.3.0|2.4.0) !!!")
@@ -21,7 +19,6 @@ end
 def s3_endpoint
   ENV["S3_ENDPOINT"] || "s3.amazonaws.com"
 end
-
 
 task :clone do
   unless File.exists? "build/doctree"
