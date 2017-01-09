@@ -19,7 +19,7 @@ module PullRequest
     return unless need?(git_branches)
     repo_full_name = "labocho/rubydoc-ja-docsets"
     revision = File.read(Dir.glob("html/*/REVISION").first).strip
-    branch = "update-documents-#{now.strftime('%Y%m%d%H%M%S'}"
+    branch = "update-documents-#{now.strftime('%Y%m%d%H%M%S')}"
 
     git_username = client.user.login
     git_email = ENV['GIT_EMAIL']
