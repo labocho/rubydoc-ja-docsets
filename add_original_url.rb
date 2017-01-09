@@ -12,7 +12,7 @@ Dir.chdir("html/#{version}") {
     path = file[1..-1] # remove first .
     path.gsub!(/-([a-z])/){ $1.upcase } # -a -> A
     url = "http://docs.ruby-lang.org/ja/#{version}#{path}"
-    puts file
+    print "."
     File.write(file, insert_url_after_html_tag(File.read(file), url))
   }
 }

@@ -105,7 +105,7 @@ Find.find(html_dir) do |file|
       index.type = item[:type]
       index.path = Pathname.new(file).relative_path_from(Pathname.new(html_dir)).to_s
       index.save!
-      pp index.attributes
+      print "."
     end
   end
 end
@@ -116,5 +116,5 @@ YAML.load_file("default_index.yml").each do |attributes|
   index.type = "Guide"
   index.path = attributes[:path]
   index.save!
-  pp index.attributes
+  print "."
 end
