@@ -4,3 +4,4 @@
 /tarball/*.tgz
 .DS_Store
 .env
+.envrc
