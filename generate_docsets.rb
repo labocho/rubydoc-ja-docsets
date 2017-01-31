@@ -67,8 +67,8 @@ Find.find(html_dir) do |file|
     if html =~ %r{<title>(.*?) \(Ruby \d\.\d\.\d\)</title>}
       title = $1
 
-      # method
-      if title =~ %r{(.*? method|module function|constant|variable) (.*)}
+      case title
+      when %r{(.*? method|module function|constant|variable) (.*)} # method
         is_variable = /variable\z/.match($1)
         path = Pathname.new(file).relative_path_from(Pathname.new(method_dir)).to_s.gsub(/\.\w+$/, "")
         item[:key] = decodename_fs(path).gsub(%r|/[\w]/|) { |s|
@@ -76,22 +76,13 @@ Find.find(html_dir) do |file|
         }
         item[:key].gsub!(/^Kernel/, "") if is_variable
         item[:type] = "Method"
-      end
-
-      # class
-      if title =~ %r{(class|module(?!\sfunction)|object) (.*)}
+      when %r{(class|module(?!\sfunction)|object) (.*)} # class
         item[:key] = CGI.unescapeHTML($2)
         item[:type] = $1.camelize
-      end
-
-      # library
-      if title =~ %r{(library) (.*)}
+      when %r{(library) (.*)} # library
         item[:key] = CGI.unescapeHTML($2) + ' ライブラリ'
         item[:type] = "Library"
-      end
-
-      # CAPI function
-      if title =~ %r{(function|macro) (.*)}
+      when %r{(function|macro) (.*)} # CAPI function
         item[:key] = CGI.unescapeHTML($2)
         item[:type] = "Function"
       end
