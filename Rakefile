@@ -20,6 +20,12 @@ def s3_endpoint
   ENV["S3_ENDPOINT"] || "s3.amazonaws.com"
 end
 
+# s3 にアップロードする際の prefix。
+# 通常 doctree の sha1 だが、doctree の更新を待たずに docset を更新したい場合に環境変数 BUILD を指定する。
+def s3_prefix
+  [sha1, ENV["BUILD"]].join("-")
+end
+
 task :clone do
   unless File.exists? "build/doctree"
     sh "git clone git://github.com/rurema/doctree.git build/doctree"
@@ -90,9 +96,9 @@ end
 
 task :feed => :generate_docsets do
   mkdir_p "tarball"
-  url = "https://#{s3_endpoint}/rubydoc-ja-docsets/#{sha1}/#{tarball_name}"
+  url = "https://#{s3_endpoint}/rubydoc-ja-docsets/#{s3_prefix}/#{tarball_name}"
   open("tarball/Ruby-#{version}-ja.xml", "w"){|f|
-    f.write %(<entry><version>#{sha1}</version><url>#{url}</url></entry>)
+    f.write %(<entry><version>#{s3_prefix}</version><url>#{url}</url></entry>)
   }
 end
 
@@ -100,9 +106,15 @@ task :release => :tarball do
   require "aws"
   s3 = Aws::S3.new(ENV["AWS_ACCESS_KEY_ID"], ENV["AWS_SECRET_ACCESS_KEY"], server: s3_endpoint)
   bucket = s3.bucket("rubydoc-ja-docsets")
+
+  if bucket.key("#{s3_prefix}/#{tarball_name}").exists?
+    puts "Already uploaded"
+    next
+  end
+
   open("tarball/#{tarball_name}", "rb:ascii-8bit") do |file|
     puts "Uploading... tarball/#{tarball_name}"
-    bucket.put "#{sha1}/#{tarball_name}", file, {}, "public-read", "content-type" => "application/x-compressed"
+    bucket.put "#{s3_prefix}/#{tarball_name}", file, {}, "public-read", "content-type" => "application/x-compressed"
   end
 end
 
