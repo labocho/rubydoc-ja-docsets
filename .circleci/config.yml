@@ -1,0 +1,32 @@
+version: 2.0
+jobs:
+ build:
+   docker:
+     - image: ruby:2.6
+   environment:
+    LANG: C.UTF-8
+   steps:
+     - checkout
+     - run:
+         name: bundle install
+         command: |
+           bundle install --deployment
+     - run:
+         name: scripts/build_and_pull_request.rb
+         command: |
+           bundle exec ruby scripts/build_and_pull_request.rb;
+workflows:
+  version: 2
+  normal_workflow:
+    jobs:
+      - build
+  schedule_workflow:
+    triggers:
+      - schedule:
+          cron: "0 9 26 * *" # UTC
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - build
