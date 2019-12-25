@@ -30,7 +30,7 @@ module PullRequest
 
   def need?(git_branches)
     return false unless git_branches.include?("master")
-    %w(2.3.0 2.4.0 2.5.0 2.6.0).each do |version|
+    %w(2.4.0 2.5.0 2.6.0 2.7.0).each do |version|
       unless system({"VERSION" => version}, "bundle", "exec", "rake", "release")
         raise "Unable to execute `bundle exec rake release VERSION=#{version}`"
       end
