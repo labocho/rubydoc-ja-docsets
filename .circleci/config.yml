@@ -17,9 +17,6 @@ jobs:
            bundle exec ruby scripts/build_and_pull_request.rb;
 workflows:
   version: 2
-  normal_workflow:
-    jobs:
-      - build
   schedule_workflow:
     triggers:
       - schedule:
