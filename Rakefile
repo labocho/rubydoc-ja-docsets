@@ -1,7 +1,7 @@
 require "shellwords"
 
 def version
-  ENV["VERSION"] || raise("!!! Please specify VERSION (2.5.0|2.6.0|2.7.0|3.0.0) !!!")
+  ENV["VERSION"] || raise("!!! Please specify VERSION (2.6.0|2.7.0|3.0.0|3.1) !!!")
 end
 
 def root
