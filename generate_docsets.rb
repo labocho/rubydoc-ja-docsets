@@ -64,7 +64,7 @@ Find.find(html_dir) do |file|
     html = File.read(file)
     item = {key: '', type: ""}
 
-    if html =~ %r{<title>(.*?) \(Ruby \d\.\d\.\d\)</title>}
+    if html =~ %r{<h1>(.*?)</h1>}
       title = $1
 
       case title
