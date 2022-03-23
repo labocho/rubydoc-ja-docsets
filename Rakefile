@@ -121,3 +121,10 @@ end
 task :server do
   ruby "-run", "-e", "httpd", "--", "gh-pages"
 end
+
+task :clean do
+  rm_rf "build"
+  rm_rf "docsets"
+  rm_rf "html"
+  rm_rf "tarball/*.tgz"
+end
