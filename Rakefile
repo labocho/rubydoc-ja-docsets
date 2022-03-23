@@ -86,6 +86,11 @@ task :install => :generate_docsets do
   cp_r source, dest
 end
 
+task :uninstall do
+  dest = "#{ENV["HOME"]}/Library/Application Support/Dash/DocSets/Ruby #{version}-ja"
+  rm_rf dest
+end
+
 task :tarball => [:generate_docsets, :feed] do
   source = "docsets/Ruby #{version}-ja.docset"
   dest = "tarball/#{tarball_name}"
