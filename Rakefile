@@ -28,7 +28,7 @@ end
 
 task :clone do
   unless File.exists? "build/doctree"
-    sh "git clone git://github.com/rurema/doctree.git build/doctree"
+    sh "git clone https://github.com/rurema/doctree.git build/doctree"
   end
 end
 
