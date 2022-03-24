@@ -1,7 +1,14 @@
 require "shellwords"
 
+AVAILABLE_VERSIONS = %w(2.6.0 2.7.0 3.0.0 3.1)
+
 def version
-  ENV["VERSION"] || raise("!!! Please specify VERSION (2.6.0|2.7.0|3.0.0|3.1) !!!")
+  @version ||= case (v = ENV["VERSION"])
+  when *AVAILABLE_VERSIONS
+    v
+  else
+    raise "!!! Please specify VERSION (#{AVAILABLE_VERSIONS.join(", ")}) !!!"
+  end
 end
 
 def root
