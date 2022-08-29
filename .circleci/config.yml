@@ -8,6 +8,10 @@ jobs:
    steps:
      - checkout
      - run:
+         name: gem install bundler:2.1.2
+         command: |
+           gem install bundler:2.1.2
+     - run:
          name: bundle install
          command: |
            bundle install --deployment
