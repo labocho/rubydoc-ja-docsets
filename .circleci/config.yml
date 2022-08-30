@@ -31,3 +31,6 @@ workflows:
                 - master
     jobs:
       - build
+  build:
+    jobs:
+      - build
