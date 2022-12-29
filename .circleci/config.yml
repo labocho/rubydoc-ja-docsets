@@ -2,15 +2,15 @@ version: 2.0
 jobs:
  build:
    docker:
-     - image: ruby:3.1.0
+     - image: ruby:3.1.1
    environment:
     LANG: C.UTF-8
    steps:
      - checkout
      - run:
-         name: gem install bundler:2.1.2
+         name: gem install bundler:2.3.25
          command: |
-           gem install bundler:2.1.2
+           gem install bundler:2.3.25
      - run:
          name: bundle install
          command: |
