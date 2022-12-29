@@ -1,6 +1,6 @@
 require "shellwords"
 
-AVAILABLE_VERSIONS = %w(2.6.0 2.7.0 3.0.0 3.1)
+AVAILABLE_VERSIONS = %w(2.7.0 3.0.0 3.1 3.2)
 
 def version
   @version ||= case (v = ENV["VERSION"])
