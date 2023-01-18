@@ -36,7 +36,7 @@ GEM
       sawyer (~> 0.9)
     progressbar (1.11.0)
     public_suffix (5.0.1)
-    rack (3.0.3)
+    rack (3.0.4.1)
     rake (13.0.6)
     rexml (3.2.5)
     ruby2_keywords (0.0.5)
