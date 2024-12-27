@@ -1,54 +1,77 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (7.0.4)
-      activesupport (= 7.0.4)
-    activerecord (7.0.4)
-      activemodel (= 7.0.4)
-      activesupport (= 7.0.4)
-    activesupport (7.0.4)
-      concurrent-ruby (~> 1.0, >= 1.0.2)
+    activemodel (8.0.1)
+      activesupport (= 8.0.1)
+    activerecord (8.0.1)
+      activemodel (= 8.0.1)
+      activesupport (= 8.0.1)
+      timeout (>= 0.4.0)
+    activesupport (8.0.1)
+      base64
+      benchmark (>= 0.3)
+      bigdecimal
+      concurrent-ruby (~> 1.0, >= 1.3.1)
+      connection_pool (>= 2.2.5)
+      drb
       i18n (>= 1.6, < 2)
+      logger (>= 1.4.2)
       minitest (>= 5.1)
-      tzinfo (~> 2.0)
-    addressable (2.8.1)
-      public_suffix (>= 2.0.2, < 6.0)
+      securerandom (>= 0.3)
+      tzinfo (~> 2.0, >= 2.0.5)
+      uri (>= 0.13.1)
+    addressable (2.8.7)
+      public_suffix (>= 2.0.2, < 7.0)
     aws (2.10.2)
       http_connection
       uuidtools
       xml-simple
+    base64 (0.2.0)
+    benchmark (0.4.0)
+    bigdecimal (3.1.9)
     bitclust-core (1.3.0)
       progressbar (>= 1.9.0, < 2.0)
       rack
       webrick
-    concurrent-ruby (1.1.10)
-    faraday (2.7.2)
-      faraday-net_http (>= 2.0, < 3.1)
-      ruby2_keywords (>= 0.0.4)
-    faraday-net_http (3.0.2)
+    concurrent-ruby (1.3.4)
+    connection_pool (2.4.1)
+    drb (2.2.1)
+    faraday (2.12.2)
+      faraday-net_http (>= 2.0, < 3.5)
+      json
+      logger
+    faraday-net_http (3.4.0)
+      net-http (>= 0.5.0)
     http_connection (1.4.4)
-    i18n (1.12.0)
+    i18n (1.14.6)
       concurrent-ruby (~> 1.0)
-    mini_portile2 (2.8.1)
-    minitest (5.16.3)
-    octokit (6.0.1)
+    json (2.9.1)
+    logger (1.6.4)
+    mini_portile2 (2.8.8)
+    minitest (5.25.4)
+    net-http (0.6.0)
+      uri
+    nkf (0.2.0)
+    octokit (9.2.0)
       faraday (>= 1, < 3)
       sawyer (~> 0.9)
-    progressbar (1.11.0)
-    public_suffix (5.0.1)
-    rack (3.0.3)
-    rake (13.0.6)
-    rexml (3.2.5)
-    ruby2_keywords (0.0.5)
+    progressbar (1.13.0)
+    public_suffix (6.0.1)
+    rack (3.1.8)
+    rake (13.2.1)
+    rexml (3.4.0)
     sawyer (0.9.2)
       addressable (>= 2.3.5)
       faraday (>= 0.17.3, < 3)
-    sqlite3 (1.5.4)
+    securerandom (0.4.1)
+    sqlite3 (2.5.0)
       mini_portile2 (~> 2.8.0)
-    tzinfo (2.0.5)
+    timeout (0.4.3)
+    tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    uri (1.0.2)
     uuidtools (2.2.0)
-    webrick (1.7.0)
+    webrick (1.9.1)
     xml-simple (1.1.9)
       rexml
 
@@ -59,12 +82,13 @@ DEPENDENCIES
   activerecord
   aws
   bitclust-core
+  nkf
   octokit
   rake
   sqlite3
 
 RUBY VERSION
-   ruby 3.1.1p18
+   ruby 3.4.1p0
 
 BUNDLED WITH
-   2.3.25
+   2.6.2

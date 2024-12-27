@@ -34,7 +34,7 @@ def s3_prefix
 end
 
 task :clone do
-  unless File.exists? "build/doctree"
+  unless File.exist? "build/doctree"
     sh "git clone https://github.com/rurema/doctree.git build/doctree"
   end
 end
@@ -44,7 +44,7 @@ task :pull => :clone do
 end
 
 task :generate_html => :pull do
-  if File.exists?("html/#{version}/REVISION") &&
+  if File.exist?("html/#{version}/REVISION") &&
      File.read("html/#{version}/REVISION").strip == sha1
      next
   end
@@ -74,7 +74,7 @@ end
 
 task :generate_docsets => :add_original_url do
   revision_file = "docsets/Ruby #{version}-ja.docset/REVISION"
-  if File.exists?(revision_file)
+  if File.exist?(revision_file)
      next if File.read(revision_file).strip == sha1
   end
   ruby "generate_docsets.rb #{version}"
@@ -119,7 +119,7 @@ task :release => :tarball do
   s3 = Aws::S3.new(ENV["AWS_ACCESS_KEY_ID"], ENV["AWS_SECRET_ACCESS_KEY"], server: s3_endpoint)
   bucket = s3.bucket("rubydoc-ja-docsets")
 
-  if bucket.key("#{s3_prefix}/#{tarball_name}").exists?
+  if bucket.key("#{s3_prefix}/#{tarball_name}").exist?
     puts "Already uploaded"
     next
   end
