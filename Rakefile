@@ -1,9 +1,9 @@
 require "shellwords"
 
-AVAILABLE_VERSIONS = %w(3.1 3.2 3.3 3.4)
+AVAILABLE_VERSIONS = %w(3.1 3.2 3.3 3.4).map(&:freeze).freeze
 
 def version
-  @version ||= case (v = ENV["VERSION"])
+  @version ||= case (v = ENV.fetch("VERSION", nil))
   when *AVAILABLE_VERSIONS
     v
   else
@@ -12,7 +12,7 @@ def version
 end
 
 def root
-  File.expand_path(File.dirname(__FILE__))
+  __dir__
 end
 
 def sha1
@@ -30,7 +30,7 @@ end
 # s3 にアップロードする際の prefix。
 # 通常 doctree の sha1 だが、doctree の更新を待たずに docset を更新したい場合に環境変数 BUILD を指定する。
 def s3_prefix
-  [sha1, ENV["BUILD"]].join("-")
+  [sha1, ENV.fetch("BUILD", nil)].compact.join("-")
 end
 
 task :clone do
@@ -46,8 +46,9 @@ end
 task :generate_html => :pull do
   if File.exist?("html/#{version}/REVISION") &&
      File.read("html/#{version}/REVISION").strip == sha1
-     next
+    next
   end
+
   outputdir = File.expand_path("html/#{version}")
   rm_rf outputdir
   mkdir_p "#{outputdir}/function"
@@ -69,14 +70,16 @@ end
 
 task :add_original_url => :generate_html do
   next if File.read("html/#{version}/doc/index.html")[%(<html lang="ja-JP"><!-- Online page at http://docs.ruby-lang.org/ja/#{version}/doc/index.html -->)]
+
   ruby "add_original_url.rb #{version}"
 end
 
 task :generate_docsets => :add_original_url do
   revision_file = "docsets/Ruby #{version}-ja.docset/REVISION"
-  if File.exist?(revision_file)
-     next if File.read(revision_file).strip == sha1
+  if File.exist?(revision_file) && File.read(revision_file).strip == (sha1)
+    next
   end
+
   ruby "generate_docsets.rb #{version}"
   sh "echo #{sha1} > #{revision_file.shellescape}"
 end
@@ -87,14 +90,14 @@ end
 
 task :install => :generate_docsets do
   source = "docsets/Ruby #{version}-ja.docset"
-  dest = "#{ENV["HOME"]}/Library/Application Support/Dash/DocSets/Ruby #{version}-ja"
+  dest = "#{Dir.home}/Library/Application Support/Dash/DocSets/Ruby #{version}-ja"
   rm_rf dest
   mkdir_p dest
   cp_r source, dest
 end
 
 task :uninstall do
-  dest = "#{ENV["HOME"]}/Library/Application Support/Dash/DocSets/Ruby #{version}-ja"
+  dest = "#{Dir.home}/Library/Application Support/Dash/DocSets/Ruby #{version}-ja"
   rm_rf dest
 end
 
@@ -109,14 +112,14 @@ end
 task :feed => :generate_docsets do
   mkdir_p "tarball"
   url = "https://#{s3_endpoint}/rubydoc-ja-docsets/#{s3_prefix}/#{tarball_name}"
-  open("tarball/Ruby-#{version}-ja.xml", "w"){|f|
+  open("tarball/Ruby-#{version}-ja.xml", "w") {|f|
     f.write %(<entry><version>#{s3_prefix}</version><url>#{url}</url></entry>)
   }
 end
 
 task :release => :tarball do
   require "aws"
-  s3 = Aws::S3.new(ENV["AWS_ACCESS_KEY_ID"], ENV["AWS_SECRET_ACCESS_KEY"], server: s3_endpoint)
+  s3 = Aws::S3.new(ENV.fetch("AWS_ACCESS_KEY_ID", nil), ENV.fetch("AWS_SECRET_ACCESS_KEY", nil), server: s3_endpoint)
   bucket = s3.bucket("rubydoc-ja-docsets")
 
   if bucket.key("#{s3_prefix}/#{tarball_name}").exist?

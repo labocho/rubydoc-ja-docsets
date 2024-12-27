@@ -1,8 +1,6 @@
-# encoding: UTF-8
 require "sqlite3"
 require "active_record"
 require "fileutils"
-require "pp"
 require "find"
 require "cgi"
 require "pathname"
@@ -10,8 +8,10 @@ require "yaml"
 require "shellwords"
 require "bitclust"
 
+# rubocop:disable Style/MixinUsage
 include FileUtils
 include BitClust::NameUtils
+# rubocop:enable Style/MixinUsage
 
 version = ARGV.shift
 
@@ -20,32 +20,30 @@ mkdir_p "#{docset}/Contents/Resources/Documents"
 exit $?.exitstatus unless system("cp -R html/#{version}/* #{"#{docset}/Contents/Resources/Documents".shellescape}")
 cp "#{docset}/Contents/Resources/Documents/rurema.png", "#{docset}/icon.png"
 
-open("#{docset}/Contents/Info.plist", "w") do |f|
-  f.write <<-XML
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-    <plist version="1.0">
-      <dict>
-        <key>CFBundleIdentifier</key>
-        <string>Ruby #{version}-ja</string>
-        <key>CFBundleName</key>
-        <string>Ruby #{version}-ja</string>
-        <key>DocSetPlatformFamily</key>
-        <string>Ruby #{version}-ja</string>
-        <key>isDashDocset</key>
-        <true/>
-        <key>dashIndexFilePath</key>
-        <string>doc/index.html</string>
-      </dict>
-    </plist>
-  XML
-end
+File.write("#{docset}/Contents/Info.plist", <<~XML)
+  <?xml version="1.0" encoding="UTF-8"?>
+  <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+  <plist version="1.0">
+    <dict>
+      <key>CFBundleIdentifier</key>
+      <string>Ruby #{version}-ja</string>
+      <key>CFBundleName</key>
+      <string>Ruby #{version}-ja</string>
+      <key>DocSetPlatformFamily</key>
+      <string>Ruby #{version}-ja</string>
+      <key>isDashDocset</key>
+      <true/>
+      <key>dashIndexFilePath</key>
+      <string>doc/index.html</string>
+    </dict>
+  </plist>
+XML
 
 rm "#{docset}/Contents/Resources/docSet.dsidx", force: true
 
 ActiveRecord::Base.establish_connection(
   adapter: "sqlite3",
-  database: "#{docset}/Contents/Resources/docSet.dsidx"
+  database: "#{docset}/Contents/Resources/docSet.dsidx",
 )
 
 ActiveRecord::Base.connection.execute <<-SQL
@@ -60,44 +58,44 @@ html_dir = "#{docset}/Contents/Resources/Documents"
 method_dir = File.join(html_dir, "method")
 char_to_mark = MARK_TO_CHAR.invert
 Find.find(html_dir) do |file|
-  if file !~ /\/doc\// && FileTest.file?(file) && File.extname(file) == '.html'
-    html = File.read(file)
-    item = {key: '', type: ""}
+  next unless file !~ %r(/doc/) && FileTest.file?(file) && File.extname(file) == ".html"
 
-    if html =~ %r{<h1>(.*?)</h1>}
-      title = $1
+  html = File.read(file)
+  item = {key: "", type: ""}
 
-      case title
-      when %r{(.*? method|module function|constant|variable) (.*)} # method
-        is_variable = /variable\z/.match($1)
-        path = Pathname.new(file).relative_path_from(Pathname.new(method_dir)).to_s.gsub(/\.\w+$/, "")
-        item[:key] = decodename_fs(path).gsub(%r|/[\w]/|) { |s|
-          char_to_mark[s.delete("/")]
-        }
-        item[:key].gsub!(/^Kernel/, "") if is_variable
-        item[:type] = "Method"
-      when %r{(class|module(?!\sfunction)|object) (.*)} # class
-        item[:key] = CGI.unescapeHTML($2)
-        item[:type] = $1.camelize
-      when %r{(library) (.*)} # library
-        item[:key] = CGI.unescapeHTML($2) + ' ライブラリ'
-        item[:type] = "Library"
-      when %r{(function|macro) (.*)} # CAPI function
-        item[:key] = CGI.unescapeHTML($2)
-        item[:type] = "Function"
-      end
+  if html =~ %r{<h1>(.*?)</h1>}
+    title = $1
+
+    case title
+    when /(.*? method|module function|constant|variable) (.*)/ # method
+      is_variable = /variable\z/.match($1)
+      path = Pathname.new(file).relative_path_from(Pathname.new(method_dir)).to_s.gsub(/\.\w+$/, "")
+      item[:key] = decodename_fs(path).gsub(%r(/[\w]/)) {|s|
+        char_to_mark[s.delete("/")]
+      }
+      item[:key].gsub!(/^Kernel/, "") if is_variable
+      item[:type] = "Method"
+    when /(class|module(?!\sfunction)|object) (.*)/ # class
+      item[:key] = CGI.unescapeHTML($2)
+      item[:type] = $1.camelize
+    when /(library) (.*)/ # library
+      item[:key] = "#{CGI.unescapeHTML($2)} ライブラリ"
+      item[:type] = "Library"
+    when /(function|macro) (.*)/ # CAPI function
+      item[:key] = CGI.unescapeHTML($2)
+      item[:type] = "Function"
     end
+  end
 
-    if item[:key].empty?
-      $stderr.puts 'no key. ' + file
-    else
-      index = SearchIndex.new
-      index.name = item[:key]
-      index.type = item[:type]
-      index.path = Pathname.new(file).relative_path_from(Pathname.new(html_dir)).to_s
-      index.save!
-      print "."
-    end
+  if item[:key].empty?
+    warn "no key. #{file}"
+  else
+    index = SearchIndex.new
+    index.name = item[:key]
+    index.type = item[:type]
+    index.path = Pathname.new(file).relative_path_from(Pathname.new(html_dir)).to_s
+    index.save!
+    print "."
   end
 end
 

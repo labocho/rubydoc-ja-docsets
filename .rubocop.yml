@@ -1,0 +1,138 @@
+AllCops:
+  Exclude:
+    - "bin/**/*"
+    - "build/**/*"
+    - "docsets/**/*"
+    - "html/**/*"
+  NewCops: enable
+
+Layout/CaseIndentation:
+  EnforcedStyle: end
+
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: variable
+
+Layout/LineLength:
+  Enabled: false
+
+Layout/EmptyLinesAroundAccessModifier:
+  EnforcedStyle: only_before
+
+Layout/SpaceInLambdaLiteral:
+  EnforcedStyle: require_space
+
+Layout/SpaceInsideBlockBraces:
+  SpaceBeforeBlockParameters: false
+
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Naming/HeredocDelimiterNaming:
+  Enabled: false
+
+Naming/MethodParameterName:
+  Enabled: false
+
+Naming/PredicateName:
+  Enabled: false
+
+Style/Alias:
+  EnforcedStyle: prefer_alias_method
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/BlockDelimiters:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/EmptyCaseCondition:
+  Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/HashAsLastArrayItem:
+  Enabled: false
+
+Style/HashSyntax:
+  Exclude:
+    - Rakefile
+    - "**/*.rake"
+
+Style/Lambda:
+  EnforcedStyle: literal
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/KeywordParametersOrder:
+  Enabled: false
+
+Style/MultilineBlockChain:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/NumericPredicate:
+  Enabled: false
+
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%i': '()'
+    '%w': '()'
+    '%r': '()'
+
+Style/PerlBackrefs:
+  Enabled: false
+
+Style/SpecialGlobalVars:
+  Enabled: false
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  EnforcedStyle: double_quotes
+
+Style/SymbolArray:
+  Enabled: false
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: consistent_comma
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+
+Style/ZeroLengthPredicate:
+  Enabled: false

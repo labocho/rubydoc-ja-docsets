@@ -3,9 +3,13 @@ source "https://rubygems.org"
 ruby "3.4.1"
 
 gem "activerecord"
-gem "sqlite3"
-gem "rake"
 gem "aws"
 gem "bitclust-core"
-gem "octokit"
 gem "nkf" # required by bitclust
+gem "octokit"
+gem "rake"
+gem "sqlite3"
+
+group :development do
+  gem "rubocop"
+end
