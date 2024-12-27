@@ -106,6 +106,13 @@ task :tarball => [:generate_docsets, :feed] do
   dest = "tarball/#{tarball_name}"
   rm_f dest
   mkdir_p File.dirname(dest)
+
+  loop do
+    break if File.exist?("#{source}/Contents/Resources/docSet.dsidx")
+
+    sleep 1
+  end
+
   sh "tar --exclude='.DS_Store' -czf #{dest.shellescape} #{source.shellescape}"
 end
 
