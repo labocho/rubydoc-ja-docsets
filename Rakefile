@@ -119,7 +119,7 @@ end
 
 task :release => :tarball do
   require "aws"
-  s3 = Aws::S3.new(ENV.fetch("AWS_ACCESS_KEY_ID", ENV.fetch("AWS_SECRET_ACCESS_KEY"), server: s3_endpoint)
+  s3 = Aws::S3.new(ENV.fetch("AWS_ACCESS_KEY_ID"), ENV.fetch("AWS_SECRET_ACCESS_KEY"), server: s3_endpoint)
   bucket = s3.bucket("rubydoc-ja-docsets")
 
   if bucket.key("#{s3_prefix}/#{tarball_name}").exists?
