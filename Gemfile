@@ -4,6 +4,7 @@ ruby "3.4.1"
 
 gem "activerecord", "~> 7.0.0"
 gem "aws"
+gem "base64"
 gem "bigdecimal" # required by activerecord
 gem "bitclust-core"
 gem "drb" # required by bitclust
