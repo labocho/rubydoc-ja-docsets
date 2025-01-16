@@ -81,6 +81,9 @@ task :generate_docsets => :add_original_url do
   end
 
   ruby "generate_docsets.rb #{version}"
+  docset_file = "docsets/Ruby #{version}-ja.docset/Contents/Resources/docSet.dsidx"
+  sh %(echo 'PRAGMA journal_mode=delete' | sqlite3 #{docset_file.shellescape})
+
   sh "echo #{sha1} > #{revision_file.shellescape}"
 end
 
