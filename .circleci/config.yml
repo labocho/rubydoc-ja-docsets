@@ -8,6 +8,14 @@ jobs:
    steps:
      - checkout
      - run:
+         name: apt update
+         command: |
+           apt update
+     - run:
+         name: apt install -y sqlite3
+         command: |
+           apt install -y sqlite3
+     - run:
          name: gem install bundler:2.6.2
          command: |
            gem install bundler:2.6.2
